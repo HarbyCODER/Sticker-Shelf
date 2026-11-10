@@ -1,7 +1,7 @@
 Package: com.harby.stickershelf
 Name: StickerShelf
-Version: 0.1.0
-Architecture: iphoneos-arm64
+Version: 0.1.1
+Architecture: iphoneos-arm64e
 Description: A local sticker shelf for the iOS Emoji keyboard.
 Maintainer: HarbyCODER
 Author: HarbyCODER

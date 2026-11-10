@@ -4,7 +4,7 @@ Bản thử nghiệm cho iPhone X/iOS 16.7.x. StickerShelf lưu ảnh sticker c�
 
 ## Cách dùng
 
-1. Cài `StickerShelf.deb` bằng Sileo trên thiết bị RootHide.
+1. Cài `StickerShelf.deb` bằng Sileo trên thiết bị RootHide. Gói RootHide gốc dùng kiến trúc `iphoneos-arm64e` và cài ứng dụng tại `/Applications`.
 2. Mở ứng dụng **StickerShelf** một lần.
 3. Chọn **Thêm từ Ảnh** hoặc **Thêm PNG/JPG từ Tệp**. Ảnh PNG có nền trong suốt sẽ giữ được hình sticker; ứng dụng không tự tách chủ thể khỏi ảnh. Nếu Messenger có nút **Chia sẻ** cho tin nhắn sticker, bạn cũng có thể gửi nó thẳng đến StickerShelf.
 4. Mở bàn phím Emoji trong Messenger, mở khu vực sticker, rồi chọn bộ **My Stickers**.
