@@ -1,0 +1,62 @@
+name: StickerShelf
+options:
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    CODE_SIGNING_ALLOWED: "NO"
+    CODE_SIGNING_REQUIRED: "NO"
+targets:
+  StickerShelf:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Shared
+    dependencies:
+      - target: StickerShelfMessages
+        embed: true
+      - target: StickerShelfShare
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.harby.stickershelf
+        PRODUCT_NAME: StickerShelf
+        INFOPLIST_FILE: App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Entitlements/StickerShelf.entitlements
+  StickerShelfMessages:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Extension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.harby.stickershelf.messages
+        PRODUCT_NAME: StickerShelfMessages
+        INFOPLIST_FILE: Extension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Entitlements/StickerShelf.entitlements
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+  StickerShelfShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ShareExtension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.harby.stickershelf.share
+        PRODUCT_NAME: StickerShelfShare
+        INFOPLIST_FILE: ShareExtension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Entitlements/StickerShelf.entitlements
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+schemes:
+  StickerShelf:
+    build:
+      targets:
+        StickerShelf: all
