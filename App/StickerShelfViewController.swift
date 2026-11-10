@@ -180,10 +180,12 @@ final class StickerShelfViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let url = files[indexPath.item]
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
-            UIAction(title: "Xóa sticker", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
-                try? StickerLibrary.remove(url)
-                self?.refresh()
-            }
+            UIMenu(children: [
+                UIAction(title: "Xóa sticker", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
+                    try? StickerLibrary.remove(url)
+                    self?.refresh()
+                }
+            ])
         }
     }
 }
