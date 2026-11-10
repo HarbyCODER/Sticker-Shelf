@@ -1,0 +1,52 @@
+name: Build StickerShelf for RootHide
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Install build tools
+        run: brew install xcodegen dpkg
+      - name: Generate Xcode project
+        run: xcodegen generate
+      - name: Build iOS app and sticker extension
+        run: >-
+          xcodebuild -project StickerShelf.xcodeproj -scheme StickerShelf
+          -configuration Release -sdk iphoneos -derivedDataPath build
+          CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+      - name: Sign app bundles for jailbroken iOS
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="build/Build/Products/Release-iphoneos/StickerShelf.app"
+          EXT="$APP/PlugIns/StickerShelfMessages.appex"
+          SHARE="$APP/PlugIns/StickerShelfShare.appex"
+          test -d "$EXT"
+          test -d "$SHARE"
+          /usr/bin/codesign --force --sign - --entitlements Entitlements/StickerShelf.entitlements "$EXT"
+          /usr/bin/codesign --force --sign - --entitlements Entitlements/StickerShelf.entitlements "$SHARE"
+          /usr/bin/codesign --force --sign - --entitlements Entitlements/StickerShelf.entitlements "$APP"
+      - name: Package for RootHide
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="package"
+          mkdir -p "$ROOT/DEBIAN" "$ROOT/var/jb/Applications" packages
+          cp packaging/control "$ROOT/DEBIAN/control"
+          cp packaging/postinst "$ROOT/DEBIAN/postinst"
+          chmod 755 "$ROOT/DEBIAN/postinst"
+          cp -R build/Build/Products/Release-iphoneos/StickerShelf.app "$ROOT/var/jb/Applications/StickerShelf.app"
+          dpkg-deb --build --root-owner-group "$ROOT" packages/StickerShelf.deb
+      - name: Upload installable package
+        uses: actions/upload-artifact@v4
+        with:
+          name: StickerShelf-deb
+          path: packages/StickerShelf.deb
+          if-no-files-found: error
